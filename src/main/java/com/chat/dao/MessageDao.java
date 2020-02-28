@@ -14,6 +14,6 @@ import com.chat.entity.Message;
 public interface MessageDao extends JpaRepository<Message,String>{
 public ArrayList<Message> findAll();
 
-@Query("SELECT u FROM Message u WHERE (sentByUserId=?1 and sentToUserId=?2) or (sentByUserId=?2 and sentToUserId=?1)")
+@Query("SELECT u FROM Message u WHERE (sentByUserId=?1 and sentToUserId=?2) or (sentByUserId=?2 and sentToUserId=?1) order by time")
 List<Message> findMessageByUserId(String sentById, String sentToId);
 }

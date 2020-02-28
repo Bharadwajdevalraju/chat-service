@@ -39,11 +39,11 @@ public class ChatServiceImpl implements ChatService{
 
 	
 	public void save(Message messsage) {
-		messageDao.save(messsage);		
+		messageDao.save(messsage);	
+		System.out.println("called");
 	}
 
-	public List<Message> findMessageByUserId(String sentByUserId, String sentToUserId) {
-		
+	public List<Message> findMessageByUserId(String sentByUserId, String sentToUserId) {		
 		return messageDao.findMessageByUserId(sentByUserId,sentToUserId);
 	}
 

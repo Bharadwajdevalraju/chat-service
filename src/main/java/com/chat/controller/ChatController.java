@@ -1,6 +1,7 @@
 package com.chat.controller;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.chat.dao.MessageDao;
@@ -12,6 +13,7 @@ import com.chat.service.ChatServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,22 +42,20 @@ List<Message> getMessages(@RequestBody MessageTemp data){
 
 @PostMapping(path="/saveMessage",consumes="application/json",produces="application/json")
 ResponseEntity<HashMap<String, String>> saveMessage(@RequestBody Message message){
+	
 	return chatService.sendMessage(message);
 }
 
 @CrossOrigin
-@MessageMapping("/chat")
-@SendTo("/topic/messages")
-ResponseEntity<List<Message>> getMessagesTest(Message message){
+@MessageMapping("/chat/{id}")
+@SendTo("/topic/messages/{id}")
+ResponseEntity<List<Message>> getMessagesTest(@DestinationVariable String id,Message message){	
+	System.out.println(message);
+	if(message!=null)
 	chatService.save(message);
-	return this.getMessagesTest(new MessageTemp(message.getSentByUserId(),message.getSentToUserId()));
+	String[] users=id.split("-");
+	return new ResponseEntity<List<Message>>(chatService.findMessageByUserId(users[0],users[1]),HttpStatus.OK);
 }
 
-@CrossOrigin
-@MessageMapping("/")
-@SendTo("/topic/messages")
-ResponseEntity<List<Message>> getMessagesTest(MessageTemp data){
-	return new ResponseEntity<List<Message>>(chatService.findMessageByUserId(data.getSentByUserId(), data.getSentToUserId()),HttpStatus.OK);
-}
 
 }
