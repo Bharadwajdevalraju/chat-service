@@ -1,0 +1,3 @@
+swaggerUrl: 'https://example.com'
+serviceName: 'chat-service'
+enableSwagger: true
